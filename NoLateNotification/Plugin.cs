@@ -19,7 +19,7 @@ namespace NoLateNotification
     {
         private const string modGUID = "Jacky.NoLateNotification";
         private const string modName = "NolateNotification";
-        private const string modVersion = "1.0.0";
+        private const string modVersion = "1.0.1";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
@@ -28,6 +28,7 @@ namespace NoLateNotification
         public static ManualLogSource logger;
 
         public ConfigEntry<bool> isNoLateNotificationEnabledEntry;
+        public ConfigEntry<bool> isRandomNotificationEnabledEntry;
 
         void Awake()
         {
@@ -41,10 +42,13 @@ namespace NoLateNotification
             logger.LogInfo("NoLateNotification mod has awaken");
 
             isNoLateNotificationEnabledEntry = Config.Bind("NoLateNotification Config", "Disable Time Late Notification", true, "This disables the ship is leaving soon notification!");
-    
+            isRandomNotificationEnabledEntry = Config.Bind("NoLateNotification Config", "Randomize Late Notification", false, "This randomizes the time that the ship is leaving soon notification is displayed!");
+
             BaseConfigItem isNoLateNotificationEnabled = new BoolCheckBoxConfigItem(isNoLateNotificationEnabledEntry, requiresRestart: false);
+            BaseConfigItem isRandomNotificationEnabled = new BoolCheckBoxConfigItem(isRandomNotificationEnabledEntry, requiresRestart: true);
 
             LethalConfigManager.AddConfigItem(isNoLateNotificationEnabled);
+            LethalConfigManager.AddConfigItem(isRandomNotificationEnabled);
 
 
             harmony.PatchAll(typeof(NotificationPatch));
